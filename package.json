@@ -1,0 +1,13 @@
+{
+  "dependencies": {
+    "git-commits": "^1.3.0",
+    "standard": "^17.1.2"
+  },
+  "scripts": {
+    "commit": "cz"
+  },
+  "devDependencies": {
+    "commitizen": "^4.3.1"
+  },
+  "license": "MIT"
+}
