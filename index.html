@@ -1,44 +1,117 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="estilos.css">
-    <title>Calculadora y tablas de multiplicar</title>
-</head>
-<header>
-    <nav class="cabecera">
-        
-    </nav>
-</header>
-<body>
-    <main class="contenido">
-        <h1 class="titulo">Calculadora</h1>
-       
-    <div class="calculadora">
-        <section class="resultado">
-            <input type="text" class="display" name="resul" aria-placeholder="0">
-        </section>
-        
-        <button name="numero">1</button>
-        <button name="numero">2</button>
-        <button name="numero">3</button>
-        <button name="simbolo">+</button>
-        <button name="numero">4</button>
-        <button name="numero">5</button> 
-        <button name="numero">6</button>
-        <button name="simbolo">-</button>
-        <button name="numero">7</button>
-        <button name="numero">8</button>
-        <button name="numero">9</button>
-        <button name="simbolo">/</button>
-        <button name="igual">=</button>
-        <button name="numero">0</button>
-        <button name="borrar">C</button>
-        <button name="simbolo">X</button>
-        
-    </div>
-    </main>
-    <script src="main.js"></script>
-</body>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Calculadora Ant Design + Tailwind</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Ant Design CSS CDN (v4) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/antd@4.24.13/dist/antd.min.css" />
+    <style>
+      /* Oculta el scroll horizontal por si acaso */
+      body { overflow-x: hidden; }
+      /* Quita el fondo blanco de la Card de Ant Design */
+      .ant-card { background: transparent !important; box-shadow: none !important; }
+      /* Personaliza el input */
+      .ant-input { font-size: 1.5rem; text-align: right; background: #f3f4f6; border-radius: 0.5rem; }
+    </style>
+  </head>
+  <body class="min-h-screen bg-gradient-to-br from-blue-200 via-indigo-200 to-purple-200 flex items-center justify-center">
+    <div id="root"></div>
+    <!-- React & ReactDOM CDN (React 17) -->
+    <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+    <!-- Babel CDN -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- Ant Design JS CDN (v4) -->
+    <script src="https://cdn.jsdelivr.net/npm/antd@4.24.13/dist/antd.min.js"></script>
+    <!-- Calculadora React -->
+    <script type="text/babel">
+      const { useState } = React;
+      const { Button, Input, Row, Col, Card } = antd;
+
+      const buttons = [
+        ["7", "8", "9", "/"],
+        ["4", "5", "6", "*"],
+        ["1", "2", "3", "-"],
+        ["0", ".", "=", "+"],
+      ];
+
+      function App() {
+        const [input, setInput] = useState("");
+
+        const handleClick = (value) => {
+          if (value === "=") {
+            try {
+              // eslint-disable-next-line no-eval
+              setInput(eval(input).toString());
+            } catch {
+              setInput("Error");
+            }
+          } else if (value === "C") {
+            setInput("");
+          } else {
+            setInput(input + value);
+          }
+        };
+
+        return (
+          <div className="w-full max-w-sm mx-auto">
+            <Card
+              className="rounded-3xl shadow-2xl bg-white/80 backdrop-blur-md"
+              title={
+                <h1 className="text-2xl font-bold text-center text-indigo-700 tracking-wide">
+                  Calculadora
+                </h1>
+              }
+              bordered={false}
+              style={{ width: "100%" }}
+            >
+              <Input
+                value={input}
+                readOnly
+                className="mb-4 py-3 px-4 text-2xl font-mono bg-gray-100 border-2 border-indigo-200 rounded-xl shadow-inner"
+                style={{ height: "3rem" }}
+              />
+              <div className="grid grid-cols-4 gap-3 mb-3">
+                {buttons.flat().map((btn, idx) => (
+                  <Button
+                    key={idx}
+                    block
+                    size="large"
+                    className={
+                      [
+                        "rounded-xl font-semibold transition-all duration-150",
+                        btn === "="
+                          ? "bg-indigo-600 text-white hover:bg-indigo-700"
+                          : ["+", "-", "*", "/"].includes(btn)
+                          ? "bg-indigo-100 text-indigo-700 hover:bg-indigo-200"
+                          : "bg-white text-gray-700 hover:bg-gray-100"
+                      ].join(" ")
+                    }
+                    style={{ height: "3rem", fontSize: "1.25rem" }}
+                    onClick={() => handleClick(btn)}
+                  >
+                    {btn}
+                  </Button>
+                ))}
+              </div>
+              <Button
+                block
+                size="large"
+                danger
+                className="rounded-xl font-bold bg-red-500 text-white hover:bg-red-600 transition-all duration-150"
+                style={{ height: "3rem", fontSize: "1.25rem" }}
+                onClick={() => handleClick("C")}
+              >
+                Limpiar
+              </Button>
+            </Card>
+          </div>
+        );
+      }
+
+      ReactDOM.render(<App />, document.getElementById("root"));
+    </script>
+  </body>
 </html>
